@@ -1,15 +1,17 @@
-import React,{useState} from 'react'
-import {Container,Form,Button,Text,InputText} from './ContactFormStyled';
-import { addContact } from '../redux/contactsReducer'
+import React,{ useState } from 'react'
+import { Container,Form,Button,Text,InputText } from './ContactFormStyled';
+import { addContactsThunk } from '../redux/fetchOperations';
 import { nanoid } from 'nanoid'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { reduxContacts } from 'components/redux/selectors';
+import { useSelector } from 'react-redux';
 
 const NewPhoneBookContainer = () =>{
     const [name, setName] = useState('')
     const [number, setNumber] = useState('')
 
-    const contactsList = useSelector(state=>state.contacts)
     const dispatch = useDispatch()
+    const contactsList = useSelector(reduxContacts)
 
     const currentName = (event) =>{
         const {name,value} = event.currentTarget
@@ -35,7 +37,7 @@ const NewPhoneBookContainer = () =>{
         }
         
         const newContact = {id: `${nanoid()}`, name:`${name}`, number:`${number}`}
-        dispatch(addContact({newContact:newContact}))
+        dispatch(addContactsThunk(newContact))
         event.currentTarget.reset()
     }
 
